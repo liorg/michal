@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+
 import Link from 'next/link';
 
 export default function About() {
@@ -9,13 +9,11 @@ export default function About() {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-            <Image
-              src="/profile-photo.png"
-              alt="תמונת פרופיל"
-              fill
-              className="object-cover"
-              priority
-            />
+            <img
+  src="/profile-photo.png"
+  alt="תמונת פרופיל"
+  className="w-full h-full object-cover"
+/>
           </div>
           <div>
             <h2 className="text-4xl font-bold mb-6 text-gray-800">המסע שלי לבריאות ולכושר</h2>
