@@ -1,6 +1,5 @@
 'use client';
 
-
 import Link from 'next/link';
 
 export default function About() {
@@ -10,10 +9,10 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
             <img
-  src="/profile-photo.png"
-  alt="תמונת פרופיל"
-  className="w-full h-full object-cover"
-/>
+              src="/profile-photo.png"
+              alt="תמונת פרופיל"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <h2 className="text-4xl font-bold mb-6 text-gray-800">המסע שלי לבריאות ולכושר</h2>
