@@ -1,6 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+type PortfolioItem = {
+  id: number;
+  title: string;
+  category: string;
+  emoji: string;
+  color: string;
+  description: string;
+  fileUrl?: string;
+  fileType?: "image" | "pdf";
+};
 
 const navItems = [
   { icon: "🤍", label: "לקוחות", id: "clients" },
@@ -19,6 +30,19 @@ const sections: Record<string, { title: string; content: string }> = {
 export default function MobileHome() {
   const [active, setActive] = useState("clients");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [portfolioOpen, setPortfolioOpen] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+
+  useEffect(() => {
+    fetch("/api/portfolio")
+      .then((r) => r.json())
+      .then((data) => setPortfolioItems(data.items))
+      .catch(() => {});
+  }, [portfolioOpen]); // re-fetch every time popup opens
+
+  const prev = () => setCarouselIndex((i) => (i === 0 ? portfolioItems.length - 1 : i - 1));
+  const next = () => setCarouselIndex((i) => (i === portfolioItems.length - 1 ? 0 : i + 1));
 
   return (
     <div dir="rtl" style={{ minHeight: "100vh", background: "#f5f0f7", fontFamily: "'Segoe UI','Arial Hebrew',Arial,sans-serif" }}>
@@ -31,43 +55,143 @@ export default function MobileHome() {
         .list-row:hover { transform: translateX(-4px); box-shadow: 0 6px 24px #b89cc830 !important; }
         .tool-btn { transition: all 0.15s; }
         .tool-btn:hover { filter: brightness(0.92); transform: scale(1.05); }
+        .portfolio-btn { transition: all 0.2s; }
+        .portfolio-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px #b89cc850 !important; }
+        .carousel-arrow { transition: all 0.15s; cursor: pointer; }
+        .carousel-arrow:hover { background: #b89cc8 !important; color: #fff !important; transform: scale(1.08); }
+        .overlay-close { transition: all 0.15s; }
+        .overlay-close:hover { background: #b89cc8 !important; color: #fff !important; }
         @media (min-width: 768px) {
           .mobile-only { display: none !important; }
           .desktop-only { display: flex !important; }
           .main-grid { grid-template-columns: repeat(4, 1fr) !important; }
+          .portfolio-card { width: 420px !important; height: 280px !important; }
         }
         @media (max-width: 767px) {
           .desktop-only { display: none !important; }
           .mobile-only { display: flex !important; }
           .main-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .portfolio-card { width: 88vw !important; height: 220px !important; }
         }
       `}</style>
 
-      {/* ── HEADER ── */}
+      {/* ══ PORTFOLIO POPUP ══ */}
+      {portfolioOpen && (
+        <div
+          onClick={() => setPortfolioOpen(false)}
+          style={{
+            position: "fixed", inset: 0, zIndex: 200,
+            background: "rgba(74,56,96,0.55)", backdropFilter: "blur(6px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#f5f0f7", borderRadius: 28, padding: "32px 24px 28px",
+              maxWidth: 520, width: "94vw", position: "relative",
+              boxShadow: "0 24px 64px rgba(74,56,96,0.25)",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 20,
+            }}
+          >
+            {/* Close */}
+            <button
+              onClick={() => setPortfolioOpen(false)}
+              className="overlay-close"
+              style={{
+                position: "absolute", top: 14, left: 14,
+                width: 34, height: 34, borderRadius: "50%", border: "none",
+                background: "#ede6f2", color: "#7a5c9a", fontSize: 18,
+                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700,
+              }}
+            >
+              ✕
+            </button>
+
+            <h2 style={{ fontWeight: 800, fontSize: 20, color: "#4a3860", margin: 0 }}>תיק עבודות</h2>
+
+            {/* Carousel card */}
+            <div
+              className="portfolio-card"
+              style={{
+                borderRadius: 20, display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center", gap: 12,
+                background: portfolioItems[carouselIndex].color,
+                transition: "background 0.35s ease",
+                position: "relative", overflow: "hidden",
+              }}
+            >
+              {portfolioItems[carouselIndex].fileUrl && portfolioItems[carouselIndex].fileType === "image" ? (
+                <img src={portfolioItems[carouselIndex].fileUrl} alt={portfolioItems[carouselIndex].title}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0, borderRadius: 20 }} />
+              ) : portfolioItems[carouselIndex].fileUrl && portfolioItems[carouselIndex].fileType === "pdf" ? (
+                <span style={{ fontSize: 64 }}>📄</span>
+              ) : (
+                <span style={{ fontSize: 64 }}>{portfolioItems[carouselIndex].emoji}</span>
+              )}
+              <div style={{ textAlign: "center", padding: "0 16px", position: "relative", zIndex: 2,
+                background: portfolioItems[carouselIndex].fileType === "image" ? "rgba(255,255,255,0.85)" : "transparent",
+                borderRadius: 12, margin: portfolioItems[carouselIndex].fileType === "image" ? "auto 12px 12px" : "0" }}>
+                <p style={{ fontWeight: 800, fontSize: 18, color: "#4a3860" }}>{portfolioItems[carouselIndex].title}</p>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "#7a5c9a", background: "#fff", borderRadius: 99, padding: "3px 12px", marginTop: 6, display: "inline-block" }}>
+                  {portfolioItems[carouselIndex].category}
+                </span>
+                <p style={{ fontSize: 12, color: "#4a3860", opacity: 0.7, marginTop: 8 }}>
+                  {portfolioItems[carouselIndex].description}
+                </p>
+              </div>
+              {/* Slide number */}
+              <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6 }}>
+                {portfolioItems.map((_, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setCarouselIndex(i)}
+                    style={{
+                      width: i === carouselIndex ? 20 : 7, height: 7, borderRadius: 99,
+                      background: i === carouselIndex ? "#7a5c9a" : "#c8aede",
+                      cursor: "pointer", transition: "all 0.25s",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Arrows */}
+            <div style={{ display: "flex", gap: 14 }}>
+              <button className="carousel-arrow" onClick={next} style={{ width: 44, height: 44, borderRadius: "50%", border: "none", background: "#ede6f2", color: "#7a5c9a", fontSize: 20, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                ‹
+              </button>
+              <span style={{ display: "flex", alignItems: "center", fontSize: 13, color: "#7a5c9a", fontWeight: 600 }}>
+                {carouselIndex + 1} / {portfolioItems.length}
+              </span>
+              <button className="carousel-arrow" onClick={prev} style={{ width: 44, height: 44, borderRadius: "50%", border: "none", background: "#ede6f2", color: "#7a5c9a", fontSize: 20, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                ›
+              </button>
+            </div>
+
+            <p style={{ fontSize: 12, color: "#b89cc8", margin: 0 }}>
+              * תוכן דינמי יתווסף בשלב הבא
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ══ HEADER ══ */}
       <header style={{ position: "sticky", top: 0, zIndex: 50, background: "#f5f0f7", borderBottom: "1px solid #d8c8e8" }}>
 
-        {/* Desktop header */}
+        {/* Desktop */}
         <div className="desktop-only" style={{ alignItems: "center", justifyContent: "space-between", padding: "14px 40px", maxWidth: 1100, margin: "0 auto" }}>
-          <span style={{ color: "#7a5c9a", fontWeight: 800, fontSize: 22 }}>✦ michal studio</span>
-          <nav style={{ display: "flex", gap: 10 }}>
+          <img src="/logo.png" alt="לוגו" style={{ height: 52, width: "auto", objectFit: "contain" }} />
+          <nav style={{ display: "flex", gap: 10, alignItems: "center" }}>
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActive(item.id)}
-                className="nav-btn"
-                style={{
-                  display: "flex", alignItems: "center", gap: 8,
-                  padding: "8px 20px", borderRadius: 999, fontSize: 14,
-                  fontWeight: 600, cursor: "pointer", border: "none",
-                  background: active === item.id ? "#b89cc8" : "#ede6f2",
-                  color: active === item.id ? "#fff" : "#4a3860",
-                  boxShadow: active === item.id ? "0 4px 14px #c8aede55" : "none",
-                  transform: active === item.id ? "translateY(-1px)" : "none",
-                }}
-              >
+              <button key={item.id} onClick={() => setActive(item.id)} className="nav-btn" style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 20px", borderRadius: 999, fontSize: 14, fontWeight: 600, cursor: "pointer", border: "none", background: active === item.id ? "#b89cc8" : "#ede6f2", color: active === item.id ? "#fff" : "#4a3860", boxShadow: active === item.id ? "0 4px 14px #c8aede55" : "none", transform: active === item.id ? "translateY(-1px)" : "none" }}>
                 <span>{item.icon}</span><span>{item.label}</span>
               </button>
             ))}
+            {/* Portfolio button */}
+            <button onClick={() => setPortfolioOpen(true)} className="portfolio-btn nav-btn" style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, cursor: "pointer", border: "2px solid #b89cc8", background: "transparent", color: "#7a5c9a", boxShadow: "0 2px 10px #c8aede30" }}>
+              🖼️ תיק עבודות
+            </button>
           </nav>
           <div style={{ display: "flex", gap: 8 }}>
             <button className="tool-btn" onClick={() => setViewMode("grid")} style={{ width: 36, height: 36, borderRadius: 9, border: "none", cursor: "pointer", background: viewMode === "grid" ? "#b89cc8" : "#ede6f2", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -79,42 +203,13 @@ export default function MobileHome() {
           </div>
         </div>
 
-        {/* Mobile header */}
+        {/* Mobile */}
         <div className="mobile-only" style={{ flexDirection: "column" }}>
-          {/* Status bar */}
-          <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 20px 4px" }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "#4a3860" }}>9:41</span>
-            <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
-              <svg width="16" height="12" viewBox="0 0 17 13" fill="none">
-                <rect x="0" y="5" width="3" height="8" rx="1" fill="#4a3860" opacity="0.45" />
-                <rect x="4.5" y="3" width="3" height="10" rx="1" fill="#4a3860" opacity="0.6" />
-                <rect x="9" y="1" width="3" height="12" rx="1" fill="#4a3860" opacity="0.8" />
-                <rect x="13.5" y="0" width="3" height="13" rx="1" fill="#4a3860" />
-              </svg>
-              <div style={{ width: 24, height: 12, borderRadius: 3, border: "1.5px solid #4a3860", position: "relative", display: "flex", alignItems: "center", paddingLeft: 2 }}>
-                <div style={{ width: "72%", height: 7, borderRadius: 2, background: "#4a3860" }} />
-                <div style={{ width: 2, height: 5, background: "#4a3860", position: "absolute", right: -4, borderRadius: "0 2px 2px 0" }} />
-              </div>
-            </div>
-          </div>
           {/* Nav circles */}
-          <div style={{ display: "flex", justifyContent: "space-around", padding: "8px 10px 0" }}>
+          <div style={{ display: "flex", justifyContent: "space-around", padding: "12px 10px 0" }}>
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActive(item.id)}
-                className="nav-btn"
-                style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flex: 1, background: "none", border: "none", cursor: "pointer" }}
-              >
-                <div style={{
-                  width: 52, height: 52, borderRadius: "50%",
-                  display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22,
-                  background: active === item.id ? "#b89cc8" : "#ede6f2",
-                  border: active === item.id ? "2.5px solid #c8aede" : "2.5px solid transparent",
-                  boxShadow: active === item.id ? "0 3px 14px #d8c8e8" : "none",
-                  transform: active === item.id ? "scale(1.08)" : "scale(1)",
-                  transition: "all 0.2s",
-                }}>
+              <button key={item.id} onClick={() => setActive(item.id)} className="nav-btn" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flex: 1, background: "none", border: "none", cursor: "pointer" }}>
+                <div style={{ width: 52, height: 52, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, background: active === item.id ? "#b89cc8" : "#ede6f2", border: active === item.id ? "2.5px solid #c8aede" : "2.5px solid transparent", boxShadow: active === item.id ? "0 3px 14px #d8c8e8" : "none", transform: active === item.id ? "scale(1.08)" : "scale(1)", transition: "all 0.2s" }}>
                   {item.icon}
                 </div>
                 <span style={{ fontSize: 11, fontWeight: active === item.id ? 700 : 500, color: active === item.id ? "#7a5c9a" : "#4a3860", opacity: active === item.id ? 1 : 0.7 }}>
@@ -123,13 +218,18 @@ export default function MobileHome() {
               </button>
             ))}
           </div>
-          {/* Tool row */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 12, padding: "10px 20px 8px", borderBottom: "1px solid #d8c8e8" }}>
+
+          {/* Tool row + portfolio button */}
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, padding: "10px 16px 10px", borderBottom: "1px solid #d8c8e8" }}>
             <button className="tool-btn" onClick={() => setViewMode("grid")} style={{ width: 36, height: 36, borderRadius: 9, border: "none", cursor: "pointer", background: viewMode === "grid" ? "#b89cc8" : "#ede6f2", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <GridIcon color={viewMode === "grid" ? "#fff" : "#7a5c9a"} />
             </button>
             <button className="tool-btn" onClick={() => setViewMode("list")} style={{ width: 36, height: 36, borderRadius: 9, border: "none", cursor: "pointer", background: viewMode === "list" ? "#b89cc8" : "#ede6f2", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <ListIcon color={viewMode === "list" ? "#fff" : "#7a5c9a"} />
+            </button>
+            {/* Portfolio mobile btn */}
+            <button onClick={() => setPortfolioOpen(true)} className="portfolio-btn" style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: "pointer", border: "2px solid #b89cc8", background: "transparent", color: "#7a5c9a" }}>
+              🖼️ תיק עבודות
             </button>
           </div>
         </div>
@@ -137,7 +237,7 @@ export default function MobileHome() {
 
       {/* ── Section banner ── */}
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 16px 0" }}>
-        <div style={{ background: "#ede6f2", borderRadius: 16, padding: "12px 18px", transition: "all 0.3s" }}>
+        <div style={{ background: "#ede6f2", borderRadius: 16, padding: "12px 18px" }}>
           <p style={{ fontWeight: 700, fontSize: 15, color: "#7a5c9a" }}>{sections[active].title}</p>
           <p style={{ fontSize: 13, color: "#4a3860", marginTop: 3, opacity: 0.85 }}>{sections[active].content}</p>
         </div>
