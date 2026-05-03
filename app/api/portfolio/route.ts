@@ -17,14 +17,14 @@ const DEFAULT_ITEMS: Item[] = [
   { id: 3, title: "סטודיו לצילום", category: "עיצוב", emoji: "📸", color: "#d5e8e4", description: "עיצוב פיד ואסטרטגיית תוכן לאינסטגרם" },
 ];
 
-const USE_REDIS = !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+const USE_REDIS = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 const KV_KEY = "portfolio_items";
 
 function getRedis() {
   const { Redis } = require("@upstash/redis");
   return new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
   });
 }
 
