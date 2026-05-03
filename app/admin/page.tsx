@@ -260,7 +260,9 @@ export default function AdminPage() {
                     <p style={{ fontSize: 13, fontWeight: 600, color: "#4a3860", margin: 0 }}>
                       {form.fileType === "pdf" ? "PDF הועלה" : "תמונה הועלתה"} ✓
                     </p>
-                    <p style={{ fontSize: 11, color: "#b89cc8", margin: "2px 0 0" }}>{form.fileUrl}</p>
+                    <p style={{ fontSize: 11, color: "#b89cc8", margin: "2px 0 0" }}>
+                      {form.fileUrl.startsWith("data:") ? "קובץ הועלה בהצלחה" : form.fileUrl}
+                    </p>
                   </div>
                   <button onClick={() => setForm({ ...form, fileUrl: "", fileType: undefined })} style={{ background: "none", border: "none", cursor: "pointer", color: "#c08080", fontSize: 18 }}>✕</button>
                 </div>
