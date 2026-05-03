@@ -15,3 +15,31 @@ html {
 body {
   background: #f5f0f7;
 }
+
+.nav-btn { transition: all 0.2s; }
+.nav-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+.card-hover { transition: all 0.2s; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 28px #b89cc835 !important; }
+.list-row { transition: all 0.2s; }
+.list-row:hover { transform: translateX(-4px); box-shadow: 0 6px 24px #b89cc830 !important; }
+.tool-btn { transition: all 0.15s; }
+.tool-btn:hover { filter: brightness(0.92); transform: scale(1.05); }
+.portfolio-btn { transition: all 0.2s; }
+.portfolio-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px #b89cc850 !important; }
+.carousel-arrow { transition: all 0.15s; cursor: pointer; }
+.carousel-arrow:hover { background: #b89cc8 !important; color: #fff !important; transform: scale(1.08); }
+.overlay-close { transition: all 0.15s; }
+.overlay-close:hover { background: #b89cc8 !important; color: #fff !important; }
+
+@media (min-width: 768px) {
+  .mobile-only { display: none !important; }
+  .desktop-only { display: flex !important; }
+  .main-grid { grid-template-columns: repeat(4, 1fr) !important; }
+  .portfolio-card { width: 420px !important; height: 280px !important; }
+}
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+  .main-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .portfolio-card { width: 88vw !important; height: 220px !important; }
+}
