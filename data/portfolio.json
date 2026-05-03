@@ -1,74 +1,9 @@
 {
   "items": [
-    {
-      "id": 1,
-      "title": "מותג קפה בוטיק",
-      "category": "מיתוג",
-      "emoji": "☕",
-      "color": "#e8d5c4",
-      "description": "בניית זהות מותגית מלאה לבית קפה עצמאי"
-    },
-    {
-      "id": 2,
-      "title": "קליניקת יופי",
-      "category": "תוכן",
-      "emoji": "✨",
-      "color": "#e8d5e8",
-      "description": "ניהול תוכן ועיצוב פוסטים לרשתות חברתיות"
-    },
-    {
-      "id": 3,
-      "title": "סטודיו לצילום",
-      "category": "עיצוב",
-      "emoji": "📸",
-      "color": "#d5e8e4",
-      "description": "עיצוב פיד ואסטרטגיית תוכן לאינסטגרם"
-    },
-    {
-      "id": 4,
-      "title": "אירועים ומסיבות",
-      "category": "מיתוג",
-      "emoji": "🎉",
-      "color": "#e8e4d5",
-      "description": "מיתוג מלא כולל לוגו, צבעים וטונציה"
-    },
-    {
-      "id": 5,
-      "title": "בוטיק אופנה",
-      "category": "תוכן",
-      "emoji": "👗",
-      "color": "#d5dde8",
-      "description": "כתיבת תוכן ועיצוב קמפיינים עונתיים"
-    },
-    {
-      "id": 6,
-      "title": "hhgf",
-      "category": "מיתוג",
-      "emoji": "☕",
-      "color": "#e8d5e8",
-      "description": "fghh",
-      "fileUrl": "/uploads/1777795509065_rollup_80x200_print_ready.pdf",
-      "fileType": "pdf"
-    },
-    {
-      "id": 7,
-      "title": "dsad",
-      "category": "עיצוב",
-      "emoji": "☕",
-      "color": "#e8d5e8",
-      "description": "asdasd",
-      "fileUrl": "/uploads/1777795541449_IMG-20260216-WA0038_1_.jpg",
-      "fileType": "image"
-    },
-    {
-      "id": 8,
-      "title": "fdsfd",
-      "category": "סושיאל",
-      "emoji": "☕",
-      "color": "#d5e8e4",
-      "description": "dsfdf",
-      "fileUrl": "/uploads/1777795695028_image.jpeg",
-      "fileType": "image"
-    }
+    { "id": 1, "title": "מותג קפה בוטיק", "category": "מיתוג", "emoji": "☕", "color": "#e8d5c4", "description": "בניית זהות מותגית מלאה לבית קפה עצמאי" },
+    { "id": 2, "title": "קליניקת יופי", "category": "תוכן", "emoji": "✨", "color": "#e8d5e8", "description": "ניהול תוכן ועיצוב פוסטים לרשתות חברתיות" },
+    { "id": 3, "title": "סטודיו לצילום", "category": "עיצוב", "emoji": "📸", "color": "#d5e8e4", "description": "עיצוב פיד ואסטרטגיית תוכן לאינסטגרם" },
+    { "id": 4, "title": "אירועים ומסיבות", "category": "מיתוג", "emoji": "🎉", "color": "#e8e4d5", "description": "מיתוג מלא כולל לוגו, צבעים וטונציה" },
+    { "id": 5, "title": "בוטיק אופנה", "category": "תוכן", "emoji": "👗", "color": "#d5dde8", "description": "כתיבת תוכן ועיצוב קמפיינים עונתיים" }
   ]
 }

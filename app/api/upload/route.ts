@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFileSync, mkdirSync } from "fs";
-import { join, extname } from "path";
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,24 +9,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file" }, { status: 400 });
     }
 
-    const ext = extname(file.name).toLowerCase();
-    const allowed = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".pdf"];
+    const ext = file.name.split(".").pop()?.toLowerCase() || "";
+    const allowed = ["jpg", "jpeg", "png", "gif", "webp", "pdf"];
     if (!allowed.includes(ext)) {
       return NextResponse.json({ error: "סוג קובץ לא נתמך" }, { status: 400 });
     }
 
+    // Convert to base64 data URL – works on Vercel (no filesystem needed)
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const base64 = buffer.toString("base64");
+    const mimeType = ext === "pdf" ? "application/pdf" : `image/${ext === "jpg" ? "jpeg" : ext}`;
+    const dataUrl = `data:${mimeType};base64,${base64}`;
 
-    // Save to public/uploads/
-    const uploadsDir = join(process.cwd(), "public", "uploads");
-    mkdirSync(uploadsDir, { recursive: true });
-
-    const filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
-    const filepath = join(uploadsDir, filename);
-    writeFileSync(filepath, buffer);
-
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({ url: dataUrl });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "שגיאה בהעלאה" }, { status: 500 });
