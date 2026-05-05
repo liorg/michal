@@ -1,186 +1,118 @@
-# FitNutrition - אתר ייעוץ תזונה וספורט
+# 🖼️ Portfolio Mobile Home
 
-## 🚀 פריסה ב-Vercel (מומלץ!)
-
-הפרויקט מוכן לפריסה מיידית ב-Vercel:
-
-1. העלה את הפרויקט ל-GitHub
-2. חבר את ה-Repository ל-Vercel
-3. Vercel יזהה אוטומטית שזה Next.js וידאג להכל!
-
-**או:**
-```bash
-npm install -g vercel
-vercel
-```
+אפליקציית Next.js למובייל ודסקטופ להצגת תיק עבודות דיגיטלי — עם ניווט דינמי, תצוגת גריד/רשימה, וקרוסלת עבודות.
 
 ---
 
-## 💻 הרצה מקומית
+## ✨ תכונות עיקריות
 
-### 1. התקן את התלויות:
-```bash
-npm install
-```
-
-### 2. הרץ את שרת הפיתוח:
-```bash
-npm run dev
-```
-
-### 3. פתח בדפדפן:
-```
-http://localhost:3000
-```
+- **ניווט מקטעים** — לקוחות, תוצאות, שירותים, מי אני
+- **תצוגה כפולה** — גריד ורשימה עם מעבר חלק
+- **תיק עבודות** — קרוסלת modal עם תמיכה בתמונות ו-PDF
+- **רספונסיבי** — פריסה נפרדת למובייל ולדסקטופ
+- **טעינה דינמית** — עבודות נטענות מ-API
 
 ---
 
-## 📝 עריכת תוכן
-
-כל התוכן נמצא בקובץ **אחד** פשוט לעריכה:
-
-### `lib/data.ts`
-
-```typescript
-// להוסיף טיפ חדש:
-export const tips = [
-  "טיפ 1...",
-  "טיפ 2...",
-  "טיפ חדש שלי!", // ← הוסף כאן
-];
-
-// להוסיף ארוחה:
-export const meals = [
-  `בוקר: ...
-צהריים: ...
-ערב: ...
-חטיפים: ...`,
-  // ← הוסף ארוחה חדשה כאן
-];
-
-// להוסיף סרטון:
-export const videos = [
-  {
-    title: "כותרת הסרטון",
-    filename: "video4.mp4" // שים את הקובץ ב-public/videos/
-  }
-];
-```
-
----
-
-## 🎬 הוספת סרטונים
-
-1. העתק את קובץ הוידאו ל: `public/videos/video4.mp4`
-2. עדכן את `lib/data.ts`:
-```typescript
-export const videos = [
-  // ... סרטונים קיימים
-  {
-    title: "הסרטון החדש שלי",
-    filename: "video4.mp4"
-  }
-];
-```
-
----
-
-## 🖼️ החלפת תמונת פרופיל
-
-החלף את הקובץ: `public/profile-photo.png`
-
----
-
-## 🎨 שינוי עיצוב
-
-### צבעים:
-כל הצבעים הסגולים נמצאים ב-Tailwind classes:
-- `from-purple-600 to-purple-800` - גרדיאנט סגול
-- `text-purple-600` - טקסט סגול
-- `border-purple-600` - מסגרת סגולה
-
-חפש והחלף ב:
-- `components/*.tsx`
-- שנה `purple` ל-`blue`, `green`, `pink` וכו'
-
-### פונטים:
-ערוך `app/globals.css`
-
----
-
-## 📁 מבנה הפרויקט
+## 🗂️ מבנה הפרויקט
 
 ```
-nutrition-site/
 ├── app/
-│   ├── layout.tsx          # Layout ראשי
-│   ├── page.tsx            # עמוד הבית
-│   └── globals.css         # CSS גלובלי
-├── components/
-│   ├── Header.tsx          # כותרת
-│   ├── Hero.tsx            # סקשן פתיחה
-│   ├── DailyContent.tsx    # תוכן יומי + חצים
-│   ├── Services.tsx        # שירותים
-│   ├── About.tsx           # אודות
-│   ├── Testimonials.tsx    # המלצות
-│   ├── Contact.tsx         # צור קשר
-│   └── Footer.tsx          # פוטר
-├── lib/
-│   └── data.ts            # ⭐ כל הנתונים כאן!
+│   ├── page.tsx              # דף הבית (MobileHome)
+│   └── api/
+│       └── portfolio/
+│           └── route.ts      # API endpoint לפריטי תיק עבודות
 ├── public/
-│   ├── profile-photo.png  # תמונת פרופיל
-│   └── videos/            # סרטונים
-└── package.json
+│   └── logo.png              # לוגו האתר
+└── README.md
 ```
 
 ---
 
-## ⚙️ פקודות
+## 🚀 התקנה והרצה
 
-| פקודה | תיאור |
-|-------|-------|
-| `npm run dev` | הרצת שרת פיתוח |
-| `npm run build` | בניה לפרודקשן |
-| `npm start` | הרצת גרסת פרודקשן |
-| `npm run lint` | בדיקת קוד |
+```bash
+# התקנת תלויות
+npm install
 
----
+# הרצה בסביבת פיתוח
+npm run dev
 
-## 🐛 פתרון בעיות
+# בנייה לפרודקשן
+npm run build
+npm start
+```
 
-### שגיאת 404 ב-Vercel?
-✅ **תוקן!** כל הנתונים עברו ל-`lib/data.ts` במקום קריאה מקבצים.
-
-### תמונה לא מופיעה?
-- ודא ש-`public/profile-photo.png` קיים
-- נקה cache: Ctrl+Shift+R
-
-### וידאו לא עובד?
-- ודא שהקובץ ב-`public/videos/` קיים
-- בדוק את השם ב-`lib/data.ts`
-- הקובץ חייב להיות .mp4
+האפליקציה תהיה זמינה בכתובת: `http://localhost:3000`
 
 ---
 
-## 📦 טכנולוגיות
+## 🔌 API
 
-- **Next.js 14** - React Framework
-- **TypeScript** - Type Safety  
-- **Tailwind CSS** - Styling
-- **Vercel** - Hosting (אוטומטי!)
+### `GET /api/portfolio`
+
+מחזיר את פריטי תיק העבודות.
+
+**תגובה לדוגמה:**
+
+```json
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "שם הפרויקט",
+      "category": "עיצוב",
+      "emoji": "💐",
+      "color": "#ede6f2",
+      "description": "תיאור קצר של העבודה",
+      "fileUrl": "/works/example.jpg",
+      "fileType": "image"
+    }
+  ]
+}
+```
+
+**שדות `fileType` נתמכים:** `"image"` | `"pdf"`
 
 ---
 
-## ✨ תכונות
+## 🧩 קומפוננטות עיקריות
 
-✅ עיצוב מודרני ורספונסיבי
-✅ תמיכה מלאה ב-RTL עברית
-✅ וידאו פלייר מובנה
-✅ ניווט עם חצים בתוכן יומי
-✅ טפסי יצירת קשר
-✅ מותאם ל-SEO
-✅ מהיר ומאובטח
+| קומפוננטה | תיאור |
+|---|---|
+| `MobileHome` | קומפוננטת הבית הראשית |
+| `PortfolioCarousel` | קרוסלת modal לתיק עבודות |
+| `CardText` | כרטיס טקסט לגריד |
+| `CardEmoji` | כרטיס אמוג'י לגריד |
+| `CardAccent` | כרטיס הדגשה סגול לגריד |
+| `GridIcon` / `ListIcon` | אייקוני מצב תצוגה |
 
 ---
 
-בהצלחה! 🎉
+## 🎨 עיצוב
+
+פלטת הצבעים:
+
+| שם | ערך |
+|---|---|
+| רקע ראשי | `#f5f0f7` |
+| סגול בהיר | `#ede6f2` |
+| סגול בינוני | `#b89cc8` |
+| סגול כהה | `#7a5c9a` |
+| טקסט כהה | `#4a3860` |
+
+---
+
+## 🛠️ טכנולוגיות
+
+- [Next.js](https://nextjs.org/) (App Router)
+- [React](https://react.dev/) עם Hooks
+- TypeScript
+- CSS-in-JS (inline styles)
+
+---
+
+## 📋 דרישות מערכת
+
+- Node.js `18+`
+- npm `9+`
